@@ -1,0 +1,12 @@
+{
+  "creativetab.gabrmod_items_tab": "Gabrmod Items",
+
+  "item.gabrmod.qtite": "Qtite",
+  "item.gabrmod.qtite_wand": "Qtite Wand",
+
+  "block.gabrmod.qtite_block": "Qtite Block",
+  "block.gabrmod.qtite_alter": "Qtite Alter",
+
+  "tooltip.gabrmod.qtite_wand_unbound_tooltip": "Bind using a qtite alter to teleport to a friend.",
+  "tooltip.gabrmod.qtite_alter_tooltip": "Place qtite items to bind inside. 2 Players must shift near a full alter in order to bind the item within."
+}

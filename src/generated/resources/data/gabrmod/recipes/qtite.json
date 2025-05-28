@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "gabrmod:qtite_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "gabrmod:qtite"
+  }
+}

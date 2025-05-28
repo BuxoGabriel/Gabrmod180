@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "gabrmod:block/qtite_alter_bottom",
+    "side": "gabrmod:block/qtite_alter_side",
+    "top": "gabrmod:block/qtite_alter_top"
+  }
+}
