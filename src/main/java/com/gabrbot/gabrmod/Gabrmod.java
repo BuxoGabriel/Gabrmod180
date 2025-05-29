@@ -1,8 +1,10 @@
 package com.gabrbot.gabrmod;
 
 import com.gabrbot.gabrmod.block.ModBlocks;
+import com.gabrbot.gabrmod.block.entity.ModBlockEntities;
 import com.gabrbot.gabrmod.item.ModItems;
 import com.gabrbot.gabrmod.loot.ModLootModifiers;
+import com.gabrbot.gabrmod.recipe.ModRecipes;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
@@ -39,6 +41,8 @@ public class Gabrmod
         ModBlocks.register(modEventBus);
         ModCreativeModeTabs.register(modEventBus);
         ModLootModifiers.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
+        ModRecipes.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);

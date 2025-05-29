@@ -1,6 +1,7 @@
 package com.gabrbot.gabrmod.block;
 
 import com.gabrbot.gabrmod.Gabrmod;
+import com.gabrbot.gabrmod.block.custom.QtiteAlterBlock;
 import com.gabrbot.gabrmod.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -23,7 +24,7 @@ public class ModBlocks {
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(SoundType.AMETHYST)));
 
     public static final RegistryObject<Block> QTITE_ALTER = registerBlock("qtite_alter",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.ENCHANTING_TABLE)));
+            () -> new QtiteAlterBlock(BlockBehaviour.Properties.copy(Blocks.ENCHANTING_TABLE)));
 
     public static <T extends Block> RegistryObject<Block> registerBlock(String name, Supplier<T> block) {
         RegistryObject<Block> blockRegister = BLOCKS.register(name, block);

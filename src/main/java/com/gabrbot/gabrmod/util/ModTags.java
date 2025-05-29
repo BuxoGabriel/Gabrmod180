@@ -11,15 +11,15 @@ import net.minecraft.world.level.block.Block;
 public class ModTags {
     public static class Blocks {
         private static TagKey<Block> tag(String name) {
-            return BlockTags.create(new ResourceLocation(Gabrmod.MODID, name));
+            return BlockTags.create(ResourceLocation.fromNamespaceAndPath(Gabrmod.MODID, name));
         }
     }
 
     public static class Items {
-        public static final TagKey<Item> QTITE_BINDING = tag("qtite_binding");
+        public static final TagKey<Item> BINDABLE = tag("bindable");
 
         public static TagKey<Item> tag(String name) {
-            return ItemTags.create(new ResourceLocation(Gabrmod.MODID, name));
+            return ItemTags.create(ResourceLocation.fromNamespaceAndPath(Gabrmod.MODID, name));
         }
     }
 }

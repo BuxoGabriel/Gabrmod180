@@ -5,10 +5,7 @@ import com.gabrbot.gabrmod.item.ModItems;
 import com.gabrbot.gabrmod.loot.AddItemModifier;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import net.minecraftforge.common.loot.LootTableIdCondition;
@@ -24,6 +21,10 @@ public class ModGlobalLootModifiersProvider extends GlobalLootModifierProvider {
         add("qtite_from_ruined_portal", new AddItemModifier(new LootItemCondition[] {
                 new LootTableIdCondition.Builder(new ResourceLocation("chests/ruined_portal")).build(),
                 LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.7F, 2.0F).build()
+        }, ModItems.QTITE.get()));
+
+        add("qtite_from_stronghold_crossing", new AddItemModifier(new LootItemCondition[] {
+                new LootTableIdCondition.Builder(new ResourceLocation("chests/stronghold_crossing")).build(),
         }, ModItems.QTITE.get()));
     }
 }

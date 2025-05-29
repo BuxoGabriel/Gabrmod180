@@ -61,12 +61,6 @@ public class QtiteWandItem extends Item {
     }
 
     @Override
-    public boolean onDroppedByPlayer(ItemStack item, Player player) {
-        BindingUtils.setBoundPlayers(item, player, player);
-        return super.onDroppedByPlayer(item, player);
-    }
-
-    @Override
     public void appendHoverText(
             @NotNull ItemStack pStack,
             @Nullable Level pLevel,
