@@ -26,5 +26,10 @@ public class ModGlobalLootModifiersProvider extends GlobalLootModifierProvider {
         add("qtite_from_stronghold_crossing", new AddItemModifier(new LootItemCondition[] {
                 new LootTableIdCondition.Builder(new ResourceLocation("chests/stronghold_crossing")).build(),
         }, ModItems.QTITE.get()));
+
+        add("qtite_from_stronghold_corridor", new AddItemModifier(new LootItemCondition[] {
+                new LootTableIdCondition.Builder(new ResourceLocation("chests/stronghold_corridor")).build(),
+                LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.7F, 2.0F).build()
+        }, ModItems.QTITE.get()));
     }
 }
