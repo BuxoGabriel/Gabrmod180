@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,25 +65,22 @@ public class QtiteAlterBlock extends BaseEntityBlock {
                 ItemStack oldItem = iItemHandler.extractItem(0, 1, false);
                 ItemStack handItems = pPlayer.getItemInHand(pHand);
                 if(!handItems.equals(ItemStack.EMPTY)) {
-                    if(handItems.is(ModTags.Items.BINDABLE)) {
-                        iItemHandler.insertItem(0, handItems.copyWithCount(1), false);
-                        if (handItems.getCount() == 1) {
-                            pPlayer.setItemInHand(pHand, oldItem);
-                        } else {
-                            handItems.setCount(handItems.getCount() - 1);
-                            if (!oldItem.equals(ItemStack.EMPTY)) {
-                                ItemHandlerHelper.giveItemToPlayer(pPlayer, oldItem, EquipmentSlot.MAINHAND.getIndex());
-                            }
-                        }
-                    } else {
-                        ItemHandlerHelper.giveItemToPlayer(pPlayer, oldItem, EquipmentSlot.MAINHAND.getIndex());
-                    }
+                    this.setBindingItem(iItemHandler, handItems);
+                    ItemHandlerHelper.giveItemToPlayer(pPlayer, oldItem, EquipmentSlot.MAINHAND.getIndex());
                 } else {
                     pPlayer.setItemInHand(pHand, oldItem);
                 }
             });
         }
         return InteractionResult.sidedSuccess(pLevel.isClientSide());
+    }
+
+    private boolean setBindingItem(IItemHandler itemHandler, ItemStack stack) {
+        if(stack.is(ModTags.Items.BINDABLE)) {
+            itemHandler.insertItem(0, stack.split(1), false);
+            return true;
+        }
+        return false;
     }
 
     @Nullable

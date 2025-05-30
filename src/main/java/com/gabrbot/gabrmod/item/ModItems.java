@@ -17,7 +17,7 @@ public class ModItems {
 
 
     public static final RegistryObject<Item> QTITE_WAND = ITEMS.register("qtite_wand",
-            () -> new QtiteWandItem(new Item.Properties().durability(1)));
+            () -> new QtiteWandItem(new Item.Properties().durability(30)));
 
     public static void register(IEventBus eventBus) { ITEMS.register(eventBus); }
 }

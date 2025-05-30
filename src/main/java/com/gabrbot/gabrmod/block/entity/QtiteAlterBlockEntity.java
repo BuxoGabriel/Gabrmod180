@@ -1,18 +1,19 @@
 package com.gabrbot.gabrmod.block.entity;
 
-import com.gabrbot.gabrmod.item.ModItems;
 import com.gabrbot.gabrmod.util.BindingUtils;
 import com.gabrbot.gabrmod.util.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -41,11 +42,20 @@ public class QtiteAlterBlockEntity extends BlockEntity {
     private static int MAX_PROGRESS = 40;
     private static double PLAYER_SEARCH_RANGE = 2.0;
 
+    private static float RENDER_ROTATION_SPEED = 1.0F;
+    private static float CRAFTING_PROGRESS_RENDER_ROTATION_SPEEDUP = 4.0F;
+
+
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
+    // Stored NBT state
     private int progress = 0;
+
     private String binding1;
     private String binding2;
+
+    // Unstored state
+    private float rotation;
 
     public QtiteAlterBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.QTITE_ALTER_BE.get(),pPos, pBlockState);
@@ -62,6 +72,16 @@ public class QtiteAlterBlockEntity extends BlockEntity {
 
     public ItemStack getRenderStack() {
         return itemHandler.getStackInSlot(0);
+    }
+
+    public float getRenderRotation() {
+        rotation += 0.5F * RENDER_ROTATION_SPEED * (progress / MAX_PROGRESS * CRAFTING_PROGRESS_RENDER_ROTATION_SPEEDUP + 1.0);
+        if(rotation >= 360.0F) rotation -= 360.0F;
+        return rotation;
+    }
+
+    public float getRenderHeight() {
+        return progress / MAX_PROGRESS;
     }
 
     @Override
@@ -119,6 +139,10 @@ public class QtiteAlterBlockEntity extends BlockEntity {
                 if (progress >= MAX_PROGRESS) {
                     bindItem(boundPlayers.get(0), boundPlayers.get(1));
                     progress = 0;
+                    if(!pLevel.isClientSide()) {
+                        pLevel.addParticle(ParticleTypes.PORTAL, pPos.getCenter().x, pPos.getCenter().y + 1.5, pPos.getCenter().z + 0.5, 0.0, 0.0, 0.0);
+                        pLevel.playSound((Player) null, pPos.getCenter().x, pPos.getCenter().y + 0.5, pPos.getCenter().z, SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    }
                 }
             } else {
                 decrementProgress();
