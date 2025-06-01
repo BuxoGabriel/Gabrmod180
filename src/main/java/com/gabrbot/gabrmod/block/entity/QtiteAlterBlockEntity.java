@@ -1,6 +1,7 @@
 package com.gabrbot.gabrmod.block.entity;
 
-import com.gabrbot.gabrmod.util.BindingUtils;
+import com.gabrbot.gabrmod.item.ModItems;
+import com.gabrbot.gabrmod.util.binding.BindingUtils;
 import com.gabrbot.gabrmod.util.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -25,11 +27,26 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
+import java.util.Optional;
 
 public class QtiteAlterBlockEntity extends BlockEntity {
+
+    private enum BINDINGTYPE {
+        SIMPLE,
+        DUO,
+        GROUP;
+
+        @Override
+        public String toString() {
+            return switch(this) {
+                case SIMPLE -> "simple";
+                case DUO -> "duo";
+                case GROUP -> "group";
+            };
+        }
+    }
     private final ItemStackHandler itemHandler = new ItemStackHandler(1) {
         @Override
         protected void onContentsChanged(int slot) {
@@ -40,7 +57,7 @@ public class QtiteAlterBlockEntity extends BlockEntity {
         }
     };
     private static int MAX_PROGRESS = 40;
-    private static double PLAYER_SEARCH_RANGE = 2.0;
+    private static int PLAYER_SEARCH_RANGE = 4;
 
     private static float RENDER_ROTATION_SPEED = 1.0F;
     private static float CRAFTING_PROGRESS_RENDER_ROTATION_SPEEDUP = 4.0F;
@@ -50,6 +67,8 @@ public class QtiteAlterBlockEntity extends BlockEntity {
 
     // Stored NBT state
     private int progress = 0;
+
+    private BINDINGTYPE bindingtype;
 
     private String binding1;
     private String binding2;
@@ -75,13 +94,13 @@ public class QtiteAlterBlockEntity extends BlockEntity {
     }
 
     public float getRenderRotation() {
-        rotation += 0.5F * RENDER_ROTATION_SPEED * (progress / MAX_PROGRESS * CRAFTING_PROGRESS_RENDER_ROTATION_SPEEDUP + 1.0);
+        rotation += 0.5F * RENDER_ROTATION_SPEED * ((float)progress / MAX_PROGRESS * CRAFTING_PROGRESS_RENDER_ROTATION_SPEEDUP + 1.0);
         if(rotation >= 360.0F) rotation -= 360.0F;
         return rotation;
     }
 
     public float getRenderHeight() {
-        return progress / MAX_PROGRESS;
+        return (float) progress / MAX_PROGRESS;
     }
 
     @Override
@@ -107,10 +126,8 @@ public class QtiteAlterBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag pTag) {
         pTag.put("inventory", itemHandler.serializeNBT());
         pTag.putInt("qtite_alter.progress", progress);
-        if(binding1 != null) pTag.putString("qtite_alter.binding1", binding1);
-        else pTag.putString("qtite_alter.binding1", "null");
-        if(binding2 != null) pTag.putString("qtite_alter.binding2", binding2);
-        else pTag.putString("qtite_alter.binding2", "null");
+        pTag.putString("qtite_alter.binding1", Objects.requireNonNullElse(binding1, "null"));
+        pTag.putString("qtite_alter.binding2", Objects.requireNonNullElse(binding2, "null"));
         super.saveAdditional(pTag);
     }
 
@@ -125,6 +142,9 @@ public class QtiteAlterBlockEntity extends BlockEntity {
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
         List<Player> nearbyShiftingPlayers = getNearbyShiftingPlayers(pLevel, pPos);
+        if(progress == 0) {
+            this.bindingtype = getBindingType(this.itemHandler.getStackInSlot(0));
+        }
         if(hasRecipe() && nearbyShiftingPlayers.size() >= 2) {
             if(progress == 0) {
                 // Progress has reset so any two players can bind item
@@ -132,16 +152,16 @@ public class QtiteAlterBlockEntity extends BlockEntity {
                 binding2 = nearbyShiftingPlayers.get(1).getStringUUID();
             }
             List<Player> boundPlayers = nearbyShiftingPlayers.stream()
-                    .filter(p -> p.getStringUUID() == binding1 || p.getStringUUID() == binding2)
-                    .collect(Collectors.toList());
+                    .filter(p -> p.getStringUUID().equals(binding1) || p.getStringUUID().equals(binding2))
+                    .toList();
             if (boundPlayers.size() == 2) {
                 progress++;
                 if (progress >= MAX_PROGRESS) {
                     bindItem(boundPlayers.get(0), boundPlayers.get(1));
-                    progress = 0;
+                    resetProgress();
                     if(!pLevel.isClientSide()) {
                         pLevel.addParticle(ParticleTypes.PORTAL, pPos.getCenter().x, pPos.getCenter().y + 1.5, pPos.getCenter().z + 0.5, 0.0, 0.0, 0.0);
-                        pLevel.playSound((Player) null, pPos.getCenter().x, pPos.getCenter().y + 0.5, pPos.getCenter().z, SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1.0F, 1.0F);
+                        pLevel.playSound( null, pPos.getCenter().x, pPos.getCenter().y + 0.5, pPos.getCenter().z, SoundEvents.ENDERMAN_TELEPORT, SoundSource.BLOCKS, 1.0F, 1.0F);
                     }
                 }
             } else {
@@ -153,12 +173,51 @@ public class QtiteAlterBlockEntity extends BlockEntity {
         setChanged(pLevel, pPos, pState);
     }
 
+    public void resetProgress() {
+        progress = 0;
+        binding1 = null;
+        binding2 = null;
+        bindingtype = null;
+    }
+
     private void decrementProgress() {
         progress = Math.max(progress - 1, 0);
     }
 
     private List<Player> getNearbyShiftingPlayers(Level pLevel, BlockPos pPos) {
-        return pLevel.players().stream().filter(p -> p.distanceToSqr(pPos.getCenter()) < PLAYER_SEARCH_RANGE * PLAYER_SEARCH_RANGE && p.isCrouching()).collect(Collectors.toList());
+        return pLevel.getEntities( null,
+                new AABB(
+                        pPos.offset(-PLAYER_SEARCH_RANGE, -PLAYER_SEARCH_RANGE, -PLAYER_SEARCH_RANGE),
+                        pPos.offset(PLAYER_SEARCH_RANGE, PLAYER_SEARCH_RANGE, PLAYER_SEARCH_RANGE)
+                )
+        ).stream()
+                .filter(p -> p instanceof Player player && player.isCrouching())
+                .map(p -> (Player) p).toList();
+    }
+
+    private BINDINGTYPE getBindingType(ItemStack item) {
+        if(item.is(ModTags.Items.BINDABLE)) {
+            return BINDINGTYPE.DUO;
+        } else if(item.is(ModItems.QTITE.get())){
+            return BINDINGTYPE.SIMPLE;
+        } else {
+            return null;
+        }
+    }
+
+    private void bindItem(List<Player> bindingPlayers) {
+        ItemStack item = this.itemHandler.getStackInSlot(0);
+        BINDINGTYPE bindingType = getBindingType(item);
+        if(bindingType == null) return;
+        switch(bindingType) {
+            case SIMPLE -> this.itemHandler.insertItem(0, new ItemStack(ModItems.GROUPITE.get()), false);
+            case DUO -> {
+                bindItem(bindingPlayers.get(0), bindingPlayers.get(1));
+            }
+            case GROUP -> {
+                // TODO
+            }
+        }
     }
 
     private void bindItem(Player bound1, Player bound2) {

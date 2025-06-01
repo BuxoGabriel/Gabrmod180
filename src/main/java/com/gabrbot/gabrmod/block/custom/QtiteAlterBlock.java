@@ -61,6 +61,7 @@ public class QtiteAlterBlock extends BaseEntityBlock {
         }
         BlockEntity e = pLevel.getBlockEntity(pPos);
         if(e instanceof QtiteAlterBlockEntity qaBlockEntity) {
+            qaBlockEntity.resetProgress();
             qaBlockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
                 ItemStack oldItem = iItemHandler.extractItem(0, 1, false);
                 ItemStack handItems = pPlayer.getItemInHand(pHand);

@@ -23,6 +23,11 @@ public class ModGlobalLootModifiersProvider extends GlobalLootModifierProvider {
                 LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.7F, 2.0F).build()
         }, ModItems.QTITE.get()));
 
+        add("groupite_from_ruined_portal", new AddItemModifier(new LootItemCondition[] {
+                new LootTableIdCondition.Builder(new ResourceLocation("chests/ruined_portal")).build(),
+                LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.2F, 2.0F).build()
+        }, ModItems.GROUPITE.get()));
+
         add("qtite_from_stronghold_crossing", new AddItemModifier(new LootItemCondition[] {
                 new LootTableIdCondition.Builder(new ResourceLocation("chests/stronghold_crossing")).build(),
         }, ModItems.QTITE.get()));

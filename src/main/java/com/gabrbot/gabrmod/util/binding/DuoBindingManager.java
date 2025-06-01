@@ -1,0 +1,15 @@
+package com.gabrbot.gabrmod.util.binding;
+
+import com.gabrbot.gabrmod.block.entity.QtiteAlterBlockEntity;
+
+public class DuoBindingManager implements IBindingManager {
+    @Override
+    public void bind(QtiteAlterBlockEntity qabe) {
+
+    }
+
+    @Override
+    public boolean stillBinding(QtiteAlterBlockEntity qabe) {
+        return false;
+    }
+}

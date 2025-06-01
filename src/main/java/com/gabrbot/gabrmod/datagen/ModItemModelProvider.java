@@ -18,6 +18,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         simpleItem(ModItems.QTITE);
+        simpleItem(ModItems.GROUPITE);
         handheldItem(ModItems.QTITE_WAND);
     }
 

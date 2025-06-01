@@ -15,6 +15,8 @@ public class ModItems {
     public static final RegistryObject<Item> QTITE = ITEMS.register("qtite",
             () -> new Item(new Item.Properties()));
 
+    public static final RegistryObject<Item> GROUPITE = ITEMS.register("groupite",
+            () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> QTITE_WAND = ITEMS.register("qtite_wand",
             () -> new QtiteWandItem(new Item.Properties().durability(30)));

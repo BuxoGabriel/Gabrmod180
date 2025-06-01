@@ -1,6 +1,6 @@
 package com.gabrbot.gabrmod.item.custom;
 
-import com.gabrbot.gabrmod.util.BindingUtils;
+import com.gabrbot.gabrmod.util.binding.BindingUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

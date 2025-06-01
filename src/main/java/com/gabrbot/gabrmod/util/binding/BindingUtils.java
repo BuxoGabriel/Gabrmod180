@@ -1,5 +1,8 @@
-package com.gabrbot.gabrmod.util;
+package com.gabrbot.gabrmod.util.binding;
 
+import com.gabrbot.gabrmod.block.entity.QtiteAlterBlockEntity;
+import com.gabrbot.gabrmod.item.ModItems;
+import com.gabrbot.gabrmod.util.ModTags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
@@ -9,6 +12,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.List;
 import java.util.Optional;
 
 public class BindingUtils {
@@ -59,5 +63,11 @@ public class BindingUtils {
         itemTags.put("bound2", StringTag.valueOf(bound2.getStringUUID()));
         itemTags.put("bound1name", StringTag.valueOf(bound1.getDisplayName().getString()));
         itemTags.put("bound2name", StringTag.valueOf(bound2.getDisplayName().getString()));
+    }
+
+    public static Optional<IBindingManager> bindingManager(ItemStack itemStack) {
+        if(itemStack.is(ModItems.QTITE.get())) return Optional.of(new SimpleBindingManager());
+        else if(itemStack.is(ModTags.Items.BINDABLE)) return Optional.of(new DuoBindingManager());
+        else return Optional.empty();
     }
 }
