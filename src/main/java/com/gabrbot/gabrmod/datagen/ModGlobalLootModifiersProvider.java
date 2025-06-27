@@ -23,11 +23,6 @@ public class ModGlobalLootModifiersProvider extends GlobalLootModifierProvider {
                 LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.7F, 2.0F).build()
         }, ModItems.QTITE.get()));
 
-        add("groupite_from_ruined_portal", new AddItemModifier(new LootItemCondition[] {
-                new LootTableIdCondition.Builder(new ResourceLocation("chests/ruined_portal")).build(),
-                LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.2F, 2.0F).build()
-        }, ModItems.GROUPITE.get()));
-
         add("qtite_from_stronghold_crossing", new AddItemModifier(new LootItemCondition[] {
                 new LootTableIdCondition.Builder(new ResourceLocation("chests/stronghold_crossing")).build(),
         }, ModItems.QTITE.get()));
@@ -35,6 +30,15 @@ public class ModGlobalLootModifiersProvider extends GlobalLootModifierProvider {
         add("qtite_from_stronghold_corridor", new AddItemModifier(new LootItemCondition[] {
                 new LootTableIdCondition.Builder(new ResourceLocation("chests/stronghold_corridor")).build(),
                 LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.7F, 2.0F).build()
+        }, ModItems.QTITE.get()));
+
+        add("qtite_in_stage_1", new AddItemModifier(new LootItemCondition[] {
+                new LootTableIdCondition.Builder(new ResourceLocation("chests/stage_1")).build(),
+                LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.7F, 2.0F).build()
+        }, ModItems.QTITE.get()));
+
+        add("qtite_in_stage_2", new AddItemModifier(new LootItemCondition[] {
+                new LootTableIdCondition.Builder(new ResourceLocation("chests/stage_2")).build(),
         }, ModItems.QTITE.get()));
     }
 }

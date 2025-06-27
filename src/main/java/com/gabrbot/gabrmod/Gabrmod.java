@@ -62,6 +62,7 @@ public class Gabrmod
         ResourceKey<CreativeModeTab> tab = event.getTabKey();
         if(tab == CreativeModeTabs.INGREDIENTS) {
             event.accept(ModItems.QTITE);
+            event.accept(ModItems.GROUPITE);
             event.accept(ModItems.QTITE_WAND);
         } else if(tab == CreativeModeTabs.BUILDING_BLOCKS) {
             event.accept(ModBlocks.QTITE_BLOCK);

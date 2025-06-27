@@ -19,6 +19,7 @@ public class ModCreativeModeTabs {
                     .title(Component.translatable("creativetab.gabrmod_items_tab"))
                     .displayItems((pParameters, pOutput) -> {
                         pOutput.accept(ModItems.QTITE.get());
+                        pOutput.accept(ModItems.GROUPITE.get());
                         pOutput.accept(ModItems.QTITE_WAND.get());
                         pOutput.accept(ModBlocks.QTITE_BLOCK.get());
                         pOutput.accept(ModBlocks.QTITE_ALTER.get());

@@ -26,7 +26,7 @@ public class QtiteAlterBlockEntityRenderer implements BlockEntityRenderer<QtiteA
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         ItemStack itemStack = pBlockEntity.getRenderStack();
         pPoseStack.pushPose();
-        pPoseStack.translate(0.5f, 1.4f + pBlockEntity.getRenderHeight() * 0.5f, 0.5f);
+        pPoseStack.translate(0.5f, 1.4f + pBlockEntity.getRenderHeight() * 1.0f, 0.5f);
         pPoseStack.scale(0.6f, 0.6f, 0.6f);
         pPoseStack.mulPose(Axis.YP.rotationDegrees(pBlockEntity.getRenderRotation()));
         itemRenderer.renderStatic(itemStack, ItemDisplayContext.FIXED, getLightLevel(pBlockEntity.getLevel(), pBlockEntity.getBlockPos()),

@@ -3,6 +3,7 @@ package com.gabrbot.gabrmod.block.custom;
 import com.gabrbot.gabrmod.block.entity.ModBlockEntities;
 import com.gabrbot.gabrmod.block.entity.QtiteAlterBlockEntity;
 import com.gabrbot.gabrmod.util.ModTags;
+import com.gabrbot.gabrmod.util.binding.BindingUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -66,7 +67,7 @@ public class QtiteAlterBlock extends BaseEntityBlock {
                 ItemStack oldItem = iItemHandler.extractItem(0, 1, false);
                 ItemStack handItems = pPlayer.getItemInHand(pHand);
                 if(!handItems.equals(ItemStack.EMPTY)) {
-                    this.setBindingItem(iItemHandler, handItems);
+                    setBindingItem(iItemHandler, handItems);
                     ItemHandlerHelper.giveItemToPlayer(pPlayer, oldItem, EquipmentSlot.MAINHAND.getIndex());
                 } else {
                     pPlayer.setItemInHand(pHand, oldItem);
@@ -77,7 +78,7 @@ public class QtiteAlterBlock extends BaseEntityBlock {
     }
 
     private boolean setBindingItem(IItemHandler itemHandler, ItemStack stack) {
-        if(stack.is(ModTags.Items.BINDABLE)) {
+        if(BindingUtils.isBindable(stack)) {
             itemHandler.insertItem(0, stack.split(1), false);
             return true;
         }
